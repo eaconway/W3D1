@@ -192,10 +192,18 @@ def colleagues_of_garfunkel
     JOIN
       movies ON movies.id = castings.movie_id
     WHERE
-      castings.actor_id = actors.id (SELECT name
+      movies.title IN (SELECT DISTINCT title
         FROM
-          actors
+          movies
+        JOIN
+          castings ON movies.id = castings.movie_id
+        JOIN
+          actors ON actors.id = castings.actor_id
         WHERE
-          name = 'Art Garfunkel')
+          actors.name = 'Art Garfunkel')
+    AND
+      name != 'Art Garfunkel'
+    GROUP BY
+      name
   SQL
 end
